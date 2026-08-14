@@ -1,4 +1,4 @@
-name: Build EblanHack ULTIMATE
+name: Build EblanHack ULTIMATE GAME EDITION
 
 on:
   push:
@@ -31,35 +31,24 @@ jobs:
         pip install pyinstaller
         pip install customtkinter ultralytics opencv-python numpy mss pyautogui pydirectinput pynput pywin32 pillow
         
-    - name: Verify model exists
-      run: |
-        if exist cs2_yolov10s.pt (
-          echo [OK] Model found
-          dir cs2_yolov10s.pt
-        ) else (
-          echo [ERROR] Model not found!
-          exit 1
-        )
-      shell: cmd
-        
     - name: Build EXE
       run: |
-        pyinstaller --onefile --windowed --name "EblanHack_Ultimate" --add-data "cs2_yolov10s.pt;." --hidden-import customtkinter --hidden-import ultralytics --hidden-import cv2 --hidden-import numpy --hidden-import win32api --hidden-import win32con --hidden-import win32process --collect-all ultralytics eblanhack.py
+        pyinstaller --onefile --windowed --name "EblanHack_Ultimate_Game_Edition" --add-data "cs2_yolov10s.pt;." --hidden-import customtkinter --hidden-import ultralytics --hidden-import cv2 --hidden-import numpy --collect-all ultralytics eblanhack.py
         
     - name: Upload Artifact
       uses: actions/upload-artifact@v4
       with:
-        name: EblanHack-Ultimate
-        path: dist/EblanHack_Ultimate.exe
+        name: EblanHack-Game-Edition
+        path: dist/EblanHack_Ultimate_Game_Edition.exe
         
     - name: Release
       uses: softprops/action-gh-release@v1
       with:
-        files: dist/EblanHack_Ultimate.exe
-        tag_name: eblan-${{ github.run_id }}
-        name: "EblanHack ULTIMATE #${{ github.run_number }}"
+        files: dist/EblanHack_Ultimate_Game_Edition.exe
+        tag_name: eblan-ultimate-${{ github.run_id }}
+        name: "EblanHack ULTIMATE GAME EDITION #${{ github.run_number }}"
         body: |
-          🔥 EBLANHACK ULTIMATE v10.0
+          🔥 EBLANHACK ULTIMATE GAME EDITION
           
           FEATURES:
           - Wallshot (bullet through walls)
@@ -70,7 +59,7 @@ jobs:
           - No Recoil
           - No Flash
           - BunnyHop
-          - Aimbot (YOLO)
+          - Aimbot (YOLO Neural Network)
           - Triggerbot
           
           HOTKEYS:
@@ -86,6 +75,6 @@ jobs:
           3. Click CONNECT
           4. Click START
           
-          USE AT YOUR OWN RISK!
+          ⚠️ USE AT YOUR OWN RISK!
         draft: false
         prerelease: true
