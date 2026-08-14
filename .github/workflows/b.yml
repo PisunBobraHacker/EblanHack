@@ -1,4 +1,4 @@
-эname: Build EblanHack ULTIMATE
+name: Build EblanHack ULTIMATE
 
 on:
   push:
