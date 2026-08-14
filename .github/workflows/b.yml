@@ -1,4 +1,4 @@
-name: Build EblanHack ULTIMATE
+эname: Build EblanHack ULTIMATE
 
 on:
   push:
@@ -25,24 +25,12 @@ jobs:
       run: |
         python -m pip install --upgrade pip
         pip install pyinstaller
-        pip install customtkinter ultralytics opencv-python numpy mss pyautogui pydirectinput pynput pywin32 pillow wmi
+        pip install customtkinter ultralytics opencv-python numpy mss pyautogui pydirectinput pynput pywin32 pillow
         pip install torch torchvision --index-url https://download.pytorch.org/whl/cpu
-        
-    - name: Verify model exists
-      run: |
-        if exist cs2_yolov10s.pt (
-          echo [OK] Model found in repo
-          dir cs2_yolov10s.pt
-        ) else (
-          echo [ERROR] Model not found in repo!
-          echo Make sure cs2_yolov10s.pt is in the root folder
-          exit 1
-        )
-      shell: cmd
         
     - name: Build EXE
       run: |
-        pyinstaller --onefile --windowed --name "EblanHack_Ultimate" --add-data "cs2_yolov10s.pt;." --hidden-import ultralytics --hidden-import cv2 --hidden-import customtkinter --hidden-import wmi --hidden-import win32com --hidden-import win32com.client --collect-all ultralytics eblanhack.py
+        pyinstaller --onefile --windowed --name "EblanHack_Ultimate" --add-data "cs2_yolov10s.pt;." --hidden-import ultralytics --hidden-import cv2 --hidden-import customtkinter --collect-all ultralytics eblanhack.py
         
     - name: Upload EXE
       uses: actions/upload-artifact@v4
@@ -57,12 +45,9 @@ jobs:
         files: dist/EblanHack_Ultimate.exe
         name: EblanHack ULTIMATE ${{ github.ref_name }}
         body: |
-          ╔══════════════════════════════════════╗
-          ║   EBLANHACK ULTIMATE v10.0         ║
-          ║   Full CS2 Cheat                   ║
-          ╚══════════════════════════════════════╝
+          🔥 EBLANHACK ULTIMATE
           
-          ## Features
+          FEATURES:
           - Wallshot (bullet through walls)
           - Autowall (bullet ricochet)
           - Glow ESP
@@ -73,23 +58,18 @@ jobs:
           - BunnyHop
           - Aimbot (YOLO)
           - Triggerbot
-          - Teleport
-          - Spinbot
           
-          ## How to use
-          1. Run CS2
-          2. Run EblanHack_Ultimate.exe as ADMINISTRATOR
-          3. Click CONNECT
-          4. Click START
-          
-          ## Requirements
-          - Windows 10/11
-          - CS2 running
-          - Administrator rights
-          
-          ## Hotkeys
+          HOTKEYS:
           - F1: Toggle bot
-          - F2: Toggle spinbot
           - F3: Toggle triggerbot
           - F5: Toggle wallshot
           - F6: Toggle autowall
+          - Alt: Hold for aimbot
+          
+          HOW TO USE:
+          1. Run CS2
+          2. Run as ADMINISTRATOR
+          3. Click CONNECT
+          4. Click START
+          
+          USE AT YOUR OWN RISK!
