@@ -5,6 +5,10 @@ on:
     branches: [ main, master ]
   release:
     types: [ created ]
+  workflow_dispatch:
+
+permissions:
+  contents: write
 
 jobs:
   build:
@@ -28,24 +32,35 @@ jobs:
         pip install customtkinter ultralytics opencv-python numpy mss pyautogui pydirectinput pynput pywin32 pillow
         pip install torch torchvision --index-url https://download.pytorch.org/whl/cpu
         
-    - name: Build EXE
+    - name: Verify model exists
+      run: |
+        if exist cs2_yolov10s.pt (
+          echo [OK] Model found
+          dir cs2_yolov10s.pt
+        ) else (
+          echo [ERROR] Model not found!
+          exit 1
+        )
+      shell: cmd
+        
+    - name: Build EXE with PyInstaller
       run: |
         pyinstaller --onefile --windowed --name "EblanHack_Ultimate" --add-data "cs2_yolov10s.pt;." --hidden-import ultralytics --hidden-import cv2 --hidden-import customtkinter --collect-all ultralytics eblanhack.py
         
-    - name: Upload EXE
+    - name: Upload Artifact
       uses: actions/upload-artifact@v4
       with:
-        name: EblanHack_Ultimate
+        name: EblanHack-Ultimate
         path: dist/EblanHack_Ultimate.exe
         
     - name: Release
-      if: github.event_name == 'release'
       uses: softprops/action-gh-release@v1
       with:
         files: dist/EblanHack_Ultimate.exe
-        name: EblanHack ULTIMATE ${{ github.ref_name }}
+        tag_name: eblan-${{ github.run_id }}
+        name: "EblanHack ULTIMATE #${{ github.run_number }}"
         body: |
-          🔥 EBLANHACK ULTIMATE
+          🔥 EBLANHACK ULTIMATE v10.0
           
           FEATURES:
           - Wallshot (bullet through walls)
@@ -73,3 +88,5 @@ jobs:
           4. Click START
           
           USE AT YOUR OWN RISK!
+        draft: false
+        prerelease: true
