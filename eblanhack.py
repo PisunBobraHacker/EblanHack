@@ -1076,15 +1076,11 @@ class MathUtils:
         return random.gauss(mean, std)
     
     @staticmethod
-    def world_to_screen(world_pos: Vector3, view_matrix: Matrix4x4) -> Optional[Vector2]:
-        """Преобразование мировых координат в экранные"""
-        screen = view_matrix.multiply(world_pos)
-        if screen.z < 0.001:
-            return None
-        return Vector2(
-            (screen.x + 1) * ScreenConstants.WIDTH / 2,
-            (1 - screen.y) * ScreenConstants.HEIGHT / 2
-        )
+def screen_to_world(screen_pos: Vector2, view_matrix: Matrix4x4, depth: float = 1.0) -> Vector3:
+    """Преобразование экранных координат в мировые (приблизительно)"""
+    x = (screen_pos.x / ScreenConstants.WIDTH) * 2 - 1
+    y = 1 - (screen_pos.y / ScreenConstants.HEIGHT) * 2
+    return view_matrix.multiply(Vector3(x, y, depth))
     
     @staticmethod
     def screen_to_world(screen_pos: Vector2, depth: float = 1.0, view_matrix: Matrix4x4) -> Vector3:
