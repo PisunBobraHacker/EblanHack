@@ -1,4 +1,4 @@
-name: Build EblanHack
+name: Build EblanHack ULTIMATE
 
 on:
   push:
@@ -21,37 +21,75 @@ jobs:
       with:
         python-version: '3.10'
         
-    - name: Install deps
+    - name: Install dependencies
       run: |
-        pip install pyinstaller customtkinter ultralytics opencv-python numpy mss pyautogui pydirectinput pynput pywin32 pillow
+        python -m pip install --upgrade pip
+        pip install pyinstaller
+        pip install customtkinter ultralytics opencv-python numpy mss pyautogui pydirectinput pynput pywin32 pillow wmi
+        pip install torch torchvision --index-url https://download.pytorch.org/whl/cpu
+        
+    - name: Verify model exists
+      run: |
+        if exist cs2_yolov10s.pt (
+          echo [OK] Model found in repo
+          dir cs2_yolov10s.pt
+        ) else (
+          echo [ERROR] Model not found in repo!
+          echo Make sure cs2_yolov10s.pt is in the root folder
+          exit 1
+        )
+      shell: cmd
         
     - name: Build EXE
       run: |
-        pyinstaller --onefile --windowed --name "EblanHack" --add-data "cs2_yolov10s.pt;." eblanhack.py
+        pyinstaller --onefile --windowed --name "EblanHack_Ultimate" --add-data "cs2_yolov10s.pt;." --hidden-import ultralytics --hidden-import cv2 --hidden-import customtkinter --hidden-import wmi --hidden-import win32com --hidden-import win32com.client --collect-all ultralytics eblanhack.py
         
     - name: Upload EXE
       uses: actions/upload-artifact@v4
       with:
-        name: EblanHack
-        path: dist/EblanHack.exe
+        name: EblanHack_Ultimate
+        path: dist/EblanHack_Ultimate.exe
         
     - name: Release
       if: github.event_name == 'release'
       uses: softprops/action-gh-release@v1
       with:
-        files: dist/EblanHack.exe
-        name: EblanHack ${{ github.ref_name }}
+        files: dist/EblanHack_Ultimate.exe
+        name: EblanHack ULTIMATE ${{ github.ref_name }}
         body: |
-          🔥 EblanHack PRO
+          ╔══════════════════════════════════════╗
+          ║   EBLANHACK ULTIMATE v10.0         ║
+          ║   Full CS2 Cheat                   ║
+          ╚══════════════════════════════════════╝
           
-          Скачай и запусти от админа!
-          
-          Фичи:
-          - Wallshot (пуля сквозь стены)
-          - Autowall (выстрел за угол)
+          ## Features
+          - Wallshot (bullet through walls)
+          - Autowall (bullet ricochet)
           - Glow ESP
           - Radar Hack
           - Speed Hack
           - No Recoil
-          - Aimbot + Triggerbot
+          - No Flash
           - BunnyHop
+          - Aimbot (YOLO)
+          - Triggerbot
+          - Teleport
+          - Spinbot
+          
+          ## How to use
+          1. Run CS2
+          2. Run EblanHack_Ultimate.exe as ADMINISTRATOR
+          3. Click CONNECT
+          4. Click START
+          
+          ## Requirements
+          - Windows 10/11
+          - CS2 running
+          - Administrator rights
+          
+          ## Hotkeys
+          - F1: Toggle bot
+          - F2: Toggle spinbot
+          - F3: Toggle triggerbot
+          - F5: Toggle wallshot
+          - F6: Toggle autowall
